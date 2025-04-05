@@ -1,0 +1,59 @@
+server:
+  port: 8082
+  address: 0.0.0.0
+  servlet:
+    context-path: /portal
+
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 2048MB
+  messages:
+    basename: i18n/base_validation,i18n/validation,i18n/message
+  datasource:
+    url: jdbc:mysql://10.20.28.79:3306/phantom_device?useSSL=false&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false&useCompression=true&useUnicode=true&autoReconnect=true&autoReconnectForPools=true&failOverReadOnly=false&useAffectedRows=true&characterEncoding=utf-8
+    username: phantom
+    password: nI3%ODUhL2C5
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initial-size: 10
+      max-active: 100
+      min-idle: 4
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      filter:
+        stat:
+          enabled: true
+          db-type: mysql
+          log-slow-sql: true
+          slow-sql-millis: 500
+          merge-sql: true
+          connection-stack-trace-enable: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  elasticsearch:
+    hosts: 10.20.28.79:9200
+
+mybatis-plus:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+mybatis:
+  mapperScan: com.send.dao.mysql
+
+
+### 接口匿名访问
+auth:
+  anonymous: /portal/auth/login,/portal/auth/publicRsaKey,/portal/auth/publicRsaKeyEncrypt
+  validateUpdatePwd: ## 无需判断是否为首次登录的url
+    exclude: /portal/config/pw,/portal/user/updatePwd,/portal/auth/login,/portal/auth/publicRsaKey,/portal/auth/publicRsaKeyEncrypt,/portal/permission/listRouter,/portal/auth/logout
+  licenseExpire:
+    exclude: /portal/auth/login,/portal/auth/logout,/portal/auth/publicRsaKey,/portal/permission/listRouter

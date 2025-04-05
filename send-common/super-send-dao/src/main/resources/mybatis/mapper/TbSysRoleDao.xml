@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.send.dao.repository.TbSysRoleDao">
+    <select id="findByUserId" resultType="com.send.model.db.mysql.TbSysRole">
+        select *
+        from tb_sys_role tsr
+        where tsr.id in (select tsur.role_id from tb_sys_user_role tsur where tsur.user_id = #{userId})
+    </select>
+</mapper>

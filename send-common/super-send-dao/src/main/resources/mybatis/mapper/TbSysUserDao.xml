@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.send.dao.repository.TbSysUserDao">
+    <sql id="pageFromSql">
+        FROM tb_sys_user tsu
+        LEFT JOIN tb_sys_user_role tsur ON tsu.id = tsur.user_id
+        LEFT JOIN tb_sys_role tsr ON tsr.id = tsur.role_id
+        <where>
+            <if test="input.username != null">
+                AND tsu.username LIKE CONCAT('%', #{input.username}, '%')
+            </if>
+
+            <if test="input.roleId != null">
+                AND tsr.id=#{input.roleId}
+            </if>
+            <if test="input.status != null and input.status != -1">
+                AND
+                CASE
+                WHEN #{input.status} = 0 THEN (tsu.expire_type=0 OR (tsu.expire_type=1 AND tsu.expire_date &gt;= NOW()))
+                AND tsu.enabled=true
+                WHEN #{input.status} = 1 THEN tsu.enabled=false
+                <if test="input.lockedUsernames != null and !input.lockedUsernames.isEmpty()">
+                    OR tsu.username IN
+                    <foreach collection="input.lockedUsernames" open="(" close=")" item="item" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                WHEN #{input.status} = 2 THEN (tsu.expire_type=1 AND tsu.expire_date &lt; NOW())
+                ELSE 1!=1
+                END
+            </if>
+        </where>
+        GROUP BY tsu.id
+    </sql>
+
+    <select id="page" resultType="com.send.model.db.mysql.bo.PageQueryUserBo">
+        SELECT tmp.*
+        FROM
+        (
+        SELECT
+        tsu.*,
+        GROUP_CONCAT(tsr.id) AS roleIds,
+        min(tsr.id) minRoleId
+        <include refid="pageFromSql"/>
+        )
+        AS tmp
+        ORDER BY tmp.minRoleId asc, tmp.expire_date desc
+        LIMIT #{input.from}, #{input.offset}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) AS count
+        FROM
+        (
+        SELECT tsu.id
+        <include refid="pageFromSql"/>
+        )
+        AS tmp
+    </select>
+</mapper>
+

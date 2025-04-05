@@ -1,0 +1,20 @@
+<config>
+    <input>
+        <jar in="*-SNAPSHOT.jar" out="*-SNAPSHOT.jar"/>
+    </input>
+    <classpath basedir="lib">
+        <jar name="*.jar"/>
+    </classpath>
+
+    <property name="log-file" value="log.xml"/>
+    <property name="skip-renaming" value="enable"/>
+    <property name="line-numbers" value="keep"/>
+    <property name="packages-naming" value="abc"/>
+    <property name="classes-naming" value="iii"/>
+    <!--    <keep-names>-->
+    <!--        <class template="class com.idss.*"/>-->
+    <!--    </keep-names>-->
+    <ignore-classes>
+        <class template="class com.send.admin.service.bo.*"/>
+    </ignore-classes>
+</config>
