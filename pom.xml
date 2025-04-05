@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.send</groupId>
+    <artifactId>super-send</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <modules>
+        <module>send-common/super-send-common</module>
+        <module>send-common/super-send-dao</module>
+        <module>send-common/super-send-model</module>
+        <module>send-portal/super-send-portal</module>
+        <module>send-portal/super-send-portal-service</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>com.project.base</groupId>
+        <artifactId>project-base-parent</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <encoding>UTF-8</encoding>
+        <jdk.version>1.8</jdk.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.project.base</groupId>
+                <artifactId>project-base-bom</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.project.base</groupId>
+                <artifactId>project-base-web</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.project.base</groupId>
+                <artifactId>project-base-mysql</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.project.base</groupId>
+                <artifactId>project-base-validation</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.project.base</groupId>
+                <artifactId>project-base-common</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.project.base</groupId>
+                <artifactId>project-base-model</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.project.base</groupId>
+                <artifactId>project-base-i18n</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>phantom-maven2</id>
+            <name>phantom-maven2</name>
+            <url>http://10.10.27.100:8081/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+</project>
