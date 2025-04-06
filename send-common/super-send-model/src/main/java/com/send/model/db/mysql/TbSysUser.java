@@ -91,6 +91,11 @@ public class TbSysUser implements Serializable {
     private Boolean loggedFlag;
 
     /**
+     * 账户余额
+     */
+    private Long accountBalance;
+
+    /**
      * 删除符 已删除-0，未删除-1
      */
     private Boolean deleteFlag;

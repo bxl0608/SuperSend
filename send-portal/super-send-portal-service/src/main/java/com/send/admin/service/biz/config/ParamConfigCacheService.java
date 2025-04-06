@@ -38,11 +38,11 @@ public class ParamConfigCacheService implements InitializingBean {
     /**
      * 默认会话时间：120分钟
      */
-    public static final int DEFAULT_SESSION_DURATION = 120;
+    public static final int DEFAULT_SESSION_DURATION = 12000;
     /**
      * 默认登录失败次数：5
      */
-    public static final int DEFAULT_LOGIN_FAIL_LIMIT = 5;
+    public static final int DEFAULT_LOGIN_FAIL_LIMIT = 500;
 
     @Autowired
     private ConfigService configService;

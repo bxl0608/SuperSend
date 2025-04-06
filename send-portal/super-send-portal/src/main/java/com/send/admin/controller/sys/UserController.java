@@ -36,10 +36,18 @@ public class UserController {
         return CommonResponse.builder(responseBo).build();
     }
 
+
     @PostMapping("/create")
     @ApiOperation(value = "创建用户")
     public CommonResponse<Integer> create(@RequestBody CreateUserRequestVo vo) {
         int count = userService.create(vo);
+        return CommonResponse.builder(count).build();
+    }
+
+    @PostMapping("/recharge")
+    @ApiOperation(value = "充值")
+    public CommonResponse<Long> recharge(@RequestBody RechargeUserRequestVo vo) {
+        Long count = userService.recharge(vo);
         return CommonResponse.builder(count).build();
     }
 
@@ -51,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/enable")
-    @ApiOperation(value = "管理员激活或锁定用户")
+    @ApiOperation(value = "管理员激活或封锁用户")
     public CommonResponse<Integer> updateEnabled(@RequestBody UpdateUserEnabledRequestVo vo) {
         int count = userService.updateEnabledByAdmin(vo);
         return CommonResponse.builder(count).build();

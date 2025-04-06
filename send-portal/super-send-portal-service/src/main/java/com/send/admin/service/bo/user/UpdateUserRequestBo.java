@@ -30,6 +30,9 @@ public class UpdateUserRequestBo {
     @ApiModelProperty("0-永久，1-临时")
     private Integer expireType;
 
+    @ApiModelProperty("账号启用禁用状态")
+    private Boolean enabled;
+
     @ApiModelProperty("有效期")
     private LocalDateTime expireDate;
 }

@@ -14,9 +14,9 @@ spring:
   messages:
     basename: i18n/base_validation,i18n/validation,i18n/message
   datasource:
-    url: jdbc:mysql://10.20.28.79:3306/phantom_device?useSSL=false&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false&useCompression=true&useUnicode=true&autoReconnect=true&autoReconnectForPools=true&failOverReadOnly=false&useAffectedRows=true&characterEncoding=utf-8
-    username: phantom
-    password: nI3%ODUhL2C5
+    url: jdbc:mysql://10.20.28.88:3306/apply_monitor_device?useSSL=false&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false&useCompression=true&useUnicode=true&autoReconnect=true&autoReconnectForPools=true&failOverReadOnly=false&useAffectedRows=true&characterEncoding=utf-8
+    username: im_send
+    password: im_send$666
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
       initial-size: 10

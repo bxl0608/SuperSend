@@ -75,6 +75,22 @@ public class UserService {
     @Autowired
     private LoginRetryCountService loginRetryCountService;
 
+    @Transactional(rollbackFor = Exception.class)
+    public Long recharge(RechargeUserRequestBo bo) {
+        validateLoginUserIsAdmin();
+        if (bo.getId() == null) {
+            throw new BusinessException(MasterExceptionEnum.NOT_NULL, I18nParamConstant.PARAM_ID);
+        }
+        TbSysUser tbSysUser = tbSysUserDao.selectById(bo.getId());
+        if (tbSysUser == null) {
+            throw new BusinessException(MasterExceptionEnum.NOT_EXIST, I18nParamConstant.PARAM_ID);
+        }
+        long mount = tbSysUser.getAccountBalance() + bo.getAccountBalance();
+        tbSysUser.setAccountBalance(mount);
+        tbSysUserDao.updateById(tbSysUser);
+        return mount;
+    }
+
     /**
      * 创建用户
      *
@@ -83,7 +99,12 @@ public class UserService {
      */
     @Transactional(rollbackFor = Exception.class)
     public int create(CreateUserRequestBo bo) {
+        bo.setExpireType(0);
+        bo.setExpireDate(LocalDateTime.now().plusYears(100L));
         validateLoginUserIsAdmin();
+        if (bo.getEnabled() == null) {
+            throw new BusinessException(MasterExceptionEnum.NOT_NULL, I18nParamConstant.PARAM_STATUS);
+        }
         // 校验
         if (StringUtils.isBlank(bo.getUsername())) {
             throw new BusinessException(MasterExceptionEnum.NOT_BLANK, I18nParamConstant.PARAM_USERNAME);
@@ -129,10 +150,15 @@ public class UserService {
      */
     @Transactional(rollbackFor = Exception.class)
     public int update(UpdateUserRequestBo bo) {
+        bo.setExpireType(0);
+        bo.setExpireDate(LocalDateTime.now().plusYears(100L));
         validateLoginUserIsAdmin();
 
         if (bo.getId() == null) {
             throw new BusinessException(MasterExceptionEnum.NOT_NULL, I18nParamConstant.PARAM_ID);
+        }
+        if (bo.getEnabled() == null) {
+            throw new BusinessException(MasterExceptionEnum.NOT_NULL, I18nParamConstant.PARAM_STATUS);
         }
         if (StringUtils.isNotBlank(bo.getNickname()) && !bo.getNickname().matches(CN_NAME_REGEX)) {
             throw new BusinessException(MasterExceptionEnum.INVALID, I18nParamConstant.PARAM_USERNAME);

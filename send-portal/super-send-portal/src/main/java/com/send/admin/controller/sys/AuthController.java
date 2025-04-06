@@ -39,8 +39,6 @@ public class AuthController {
         LoginRequestBO logonBO = new LoginRequestBO();
         logonBO.setPassword(loginRequestVO.getPassword());
         logonBO.setUsername(loginRequestVO.getUsername());
-        logonBO.setVerifyCode(loginRequestVO.getVerifyCode());
-        logonBO.setVerifyCodeId(loginRequestVO.getVerifyCodeId());
 
         LoginResponseBO loginResponseBO = authService.login(logonBO);
 

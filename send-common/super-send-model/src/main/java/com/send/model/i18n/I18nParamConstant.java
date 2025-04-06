@@ -16,6 +16,7 @@ public class I18nParamConstant {
 
     //
     public static final String PARAM_ID = "{param.id}";
+    public static final String PARAM_STATUS = "{param.status}";
     public static final String PARAM_NAME = "{param.name}";
     public static final String PARAM_USERNAME = "{param.username}";
     public static final String PARAM_PASSWORD = "{param.password}";
