@@ -52,8 +52,6 @@ mybatis:
 
 ### 接口匿名访问
 auth:
-  anonymous: /portal/auth/login,/portal/auth/publicRsaKey,/portal/auth/publicRsaKeyEncrypt
+  anonymous: /portal/auth/login,/portal/auth/publicRsaKeyEncrypt
   validateUpdatePwd: ## 无需判断是否为首次登录的url
-    exclude: /portal/config/pw,/portal/user/updatePwd,/portal/auth/login,/portal/auth/publicRsaKey,/portal/auth/publicRsaKeyEncrypt,/portal/permission/listRouter,/portal/auth/logout
-  licenseExpire:
-    exclude: /portal/auth/login,/portal/auth/logout,/portal/auth/publicRsaKey,/portal/permission/listRouter
+    exclude: /portal/config/pw,/portal/user/updatePwd,/portal/auth/login,/portal/auth/publicRsaKeyEncrypt,/portal/permission/listRouter,/portal/auth/logout

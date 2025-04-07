@@ -32,10 +32,13 @@ VALUES
 (101, NULL, 2, '/portal/auth/logout', 0, '', '', '', '2023-03-15 11:19:49'),
 (102, NULL, 2, '/portal/role/list', 0, '', '', '', '2023-03-22 00:00:00'),
 
+(110, NULL, 2, '/portal//account/detail/list', 0, '', '', '', '2023-03-22 00:00:00'),
+
 (160, NULL, 2, '/portal/user/list', 0, '', '', '', '2023-03-22 00:00:00'),
 (161, NULL, 2, '/portal/user/create', 0, '', '', '', '2023-03-22 00:00:00'),
 (162, NULL, 2, '/portal/user/update', 0, '', '', '', '2023-03-22 00:00:00'),
 (163, NULL, 2, '/portal/user/enable', 0, '', '', '', '2023-03-22 00:00:00'),
 (164, NULL, 2, '/portal/user/updatePwd', 0, '', '', '', '2023-03-22 00:00:00'),
 (165, NULL, 2, '/portal/user/resetPwd', 0, '', '', '', '2023-03-22 00:00:00'),
-(166, NULL, 2, '/portal/user/delete', 0, '', '', '', '2023-03-22 00:00:00');
+(166, NULL, 2, '/portal/user/delete', 0, '', '', '', '2023-03-22 00:00:00'),
+(167, NULL, 2, '/portal/user/recharge', 0, '', '', '', '2023-03-22 00:00:00');

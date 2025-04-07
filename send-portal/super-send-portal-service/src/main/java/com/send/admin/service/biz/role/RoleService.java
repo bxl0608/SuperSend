@@ -43,18 +43,22 @@ public class RoleService {
         if(CollectionUtils.isEmpty(tbSysRoles)){
             RoleResponseBo bo = new RoleResponseBo();
             bo.setId(UserRoleEnum.ADMIN.getType());
-            bo.setRoleName(UserRoleEnum.ADMIN.getName());
+            bo.setRoleType(UserRoleEnum.ADMIN.getName());
+            bo.setRoleName(UserRoleEnum.ADMIN.getValue());
             bos.add(bo);
             RoleResponseBo boCommon = new RoleResponseBo();
             bo.setId(UserRoleEnum.COMMON.getType());
-            bo.setRoleName(UserRoleEnum.COMMON.getName());
+            bo.setRoleType(UserRoleEnum.COMMON.getName());
+            bo.setRoleName(UserRoleEnum.COMMON.getValue());
             bos.add(boCommon);
             return bos;
         }
         tbSysRoles.forEach(tbSysRole -> {
             RoleResponseBo bo = new RoleResponseBo();
             bo.setRoleName(tbSysRole.getRoleDesc());
+            bo.setRoleType(tbSysRole.getRole());
             bo.setId(tbSysRole.getId());
+            bos.add(bo);
         });
         return bos;
 

@@ -1,12 +1,12 @@
-package com.send.admin.controller.sys;
+package com.send.admin.controller;
 
 import com.project.base.model.pagination.PageList;
 import com.project.base.model.web.CommonResponse;
-import com.send.admin.service.biz.role.RoleService;
-import com.send.admin.service.biz.user.UserService;
-import com.send.admin.service.bo.role.RoleResponseBo;
+import com.send.admin.service.biz.AccountDetailService;
+import com.send.admin.service.bo.PageQueryAccountDetailRequestBo;
 import com.send.admin.service.bo.user.PageQueryUserResponseBo;
-import com.send.admin.vo.user.*;
+import com.send.admin.vo.user.PageQueryUserRequestVo;
+import com.send.model.db.mysql.AccountDetail;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -16,29 +16,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 /**
+ * Compang: Information Technology Company
+ *
  * @author WangCheng
  * @version 1.0
- * @CreateTime: 2025-04-06 17:29
- * @Description:
- * @Company: Information Technology Company
+ * @date 2025年04月07日 20:45
+ * @description：
  */
 @Slf4j
 @RestController
-@RequestMapping("/role")
-@Api(tags = "角色")
-public class RoleController {
+@RequestMapping("/account/detail")
+@Api(tags = "财务管理模块")
+public class AccountDetailController {
 
     @Autowired
-    private RoleService roleService;
+    private AccountDetailService accountDetailService;
 
     @PostMapping("/list")
-    @ApiOperation(value = "查询角色列表")
-    public CommonResponse<List<RoleResponseBo>> list() {
-        List<RoleResponseBo> responseBo = roleService.list();
+    @ApiOperation(value = "分页查询财务明细")
+    public CommonResponse<PageList<AccountDetail>> list(@RequestBody PageQueryAccountDetailRequestBo vo) {
+        PageList<AccountDetail> responseBo = accountDetailService.pageList(vo);
         return CommonResponse.builder(responseBo).build();
     }
-
 }

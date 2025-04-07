@@ -19,7 +19,7 @@ public class CreateUserRequestBo {
     private String username;
 
     @ApiModelProperty("角色列表")
-    private List<String> roleNameList;
+    private String roleType;
 
     @ApiModelProperty("用户密码")
     private String password;

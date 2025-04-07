@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -76,7 +77,7 @@ public class TbSysUser implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 账号启用禁用状态
+     * 账号启用禁用状态,1-正常，0-封禁
      */
     private Boolean enabled;
 
@@ -93,7 +94,7 @@ public class TbSysUser implements Serializable {
     /**
      * 账户余额
      */
-    private Long accountBalance;
+    private BigDecimal accountBalance;
 
     /**
      * 删除符 已删除-0，未删除-1

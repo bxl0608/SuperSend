@@ -18,5 +18,6 @@
     <ignore-classes>
         <class template="class com.send.admin.controller.*"/>
         <class template="class com.send.admin.vo.*"/>
+        <class template="class com.send.admin.SuperSendPortalApplication"/>
     </ignore-classes>
 </config>

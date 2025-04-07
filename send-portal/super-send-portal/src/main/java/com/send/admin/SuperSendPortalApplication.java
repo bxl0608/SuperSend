@@ -17,10 +17,10 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @MapperScan({"${mybatis.mapperScan}"})
 @Import({WebScanConfiguration.class, MysqlScanConfiguration.class})
-public class ApplyMonitorPortalApplication {
+public class SuperSendPortalApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ApplyMonitorPortalApplication.class, args);
+        SpringApplication.run(SuperSendPortalApplication.class, args);
     }
 
 }

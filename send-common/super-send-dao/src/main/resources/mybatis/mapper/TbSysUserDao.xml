@@ -14,6 +14,9 @@
             <if test="input.roleId != null">
                 AND tsr.id=#{input.roleId}
             </if>
+            <if test="input.enabled != null">
+                AND tsr.enabled=#{input.roleId}
+            </if>
             <if test="input.status != null and input.status != -1">
                 AND
                 CASE

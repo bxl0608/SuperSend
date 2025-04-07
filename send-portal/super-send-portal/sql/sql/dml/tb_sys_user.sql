@@ -1,2 +1,2 @@
 INSERT INTO apply_monitor_device.tb_sys_user (id,username,password,password_salt,nickname,enabled,expire_type,expire_date,builtin_flag,logged_flag,password_update_time,create_time,account_balance,update_time,delete_flag) VALUES
-	 (1,'admin','8pG2XD6vu6mdbmB7rC3gVu0Xn2Tn15AeBid65eC+a3IE1GfH/uZXs+3C2ty7ZgFrnGG96okWDhVFKha0P6wC6g==','66eaf5f71932','admin',1,0,'2099-03-15 00:00:00',1,0,'2099-03-15 00:00:00','2023-03-15 00:00:00',0,'2025-04-06 17:34:48',0);
+	 (1,'admin','8pG2XD6vu6mdbmB7rC3gVu0Xn2Tn15AeBid65eC+a3IE1GfH/uZXs+3C2ty7ZgFrnGG96okWDhVFKha0P6wC6g==','66eaf5f71932','admin',1,0,'2099-03-15 00:00:00',1,1,'2099-03-15 00:00:00','2025-03-15 00:00:00',0.0000,'2025-04-06 17:34:48',0);

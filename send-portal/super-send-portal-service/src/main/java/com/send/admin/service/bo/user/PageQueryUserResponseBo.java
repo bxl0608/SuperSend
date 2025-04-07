@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,21 +19,22 @@ public class PageQueryUserResponseBo {
     private String username;
 
     @ApiModelProperty("角色名称列表")
-    private List<String> roleNameList;
+    private String roleType;
 
     @ApiModelProperty("昵称或者全名")
     private String nickname;
 
-    @ApiModelProperty("有效期")
-    private LocalDateTime expireDate;
+    /**
+     * 账户余额
+     */
+    private BigDecimal accountBalance;
 
-    @ApiModelProperty("是否过期")
-    private Boolean expired;
-
-    @ApiModelProperty("是否被锁定")
-    private Boolean locked;
-
-    @ApiModelProperty("false-非内置用户，true-内置用户")
-    private Boolean builtinFlag;
-
+    /**
+     * 账号启用禁用状态,1-正常，0-封禁
+     */
+    private Boolean enabled;
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
 }

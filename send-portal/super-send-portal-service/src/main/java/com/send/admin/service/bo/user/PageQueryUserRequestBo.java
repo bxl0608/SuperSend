@@ -24,6 +24,11 @@ public class PageQueryUserRequestBo {
     @ApiModelProperty("角色名称")
     private String role;
 
-    @ApiModelProperty("状态：-1=所有，0=正常，1=锁定，2=过期")
-    private Integer status;
+/*    @ApiModelProperty("状态：-1=所有，0=正常，1=锁定，2=过期")
+    private Integer status;*/
+
+    /**
+     * 账号启用禁用状态,1-正常，0-封禁
+     */
+    private Integer enabled;
 }

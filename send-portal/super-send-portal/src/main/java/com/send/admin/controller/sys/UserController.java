@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 /**
  * @author WangCheng
  * @version 1.0
@@ -46,8 +48,8 @@ public class UserController {
 
     @PostMapping("/recharge")
     @ApiOperation(value = "充值")
-    public CommonResponse<Long> recharge(@RequestBody RechargeUserRequestVo vo) {
-        Long count = userService.recharge(vo);
+    public CommonResponse<BigDecimal> recharge(@RequestBody RechargeUserRequestVo vo) {
+        BigDecimal count = userService.recharge(vo);
         return CommonResponse.builder(count).build();
     }
 

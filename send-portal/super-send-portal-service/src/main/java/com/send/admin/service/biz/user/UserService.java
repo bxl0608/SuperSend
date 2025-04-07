@@ -1,8 +1,11 @@
 package com.send.admin.service.biz.user;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.google.common.collect.Lists;
+import com.send.admin.service.biz.AccountDetailService;
 import com.send.common.security.PasswordTool;
 import com.send.common.tool.TypeConvertTool;
+import com.send.dao.repository.AccountDetailDao;
 import com.send.dao.repository.TbSysRoleDao;
 import com.send.dao.repository.TbSysUserDao;
 import com.send.dao.repository.TbSysUserRoleDao;
@@ -38,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,8 +79,11 @@ public class UserService {
     @Autowired
     private LoginRetryCountService loginRetryCountService;
 
+    @Autowired
+    private AccountDetailService accountDetailService;
+
     @Transactional(rollbackFor = Exception.class)
-    public Long recharge(RechargeUserRequestBo bo) {
+    public BigDecimal recharge(RechargeUserRequestBo bo) {
         validateLoginUserIsAdmin();
         if (bo.getId() == null) {
             throw new BusinessException(MasterExceptionEnum.NOT_NULL, I18nParamConstant.PARAM_ID);
@@ -85,7 +92,8 @@ public class UserService {
         if (tbSysUser == null) {
             throw new BusinessException(MasterExceptionEnum.NOT_EXIST, I18nParamConstant.PARAM_ID);
         }
-        long mount = tbSysUser.getAccountBalance() + bo.getAccountBalance();
+        BigDecimal mount = tbSysUser.getAccountBalance().add(bo.getAccountBalance());
+        accountDetailService.addAccountDetail(bo, tbSysUser, mount);
         tbSysUser.setAccountBalance(mount);
         tbSysUserDao.updateById(tbSysUser);
         return mount;
@@ -112,13 +120,16 @@ public class UserService {
         if (StringUtils.isBlank(bo.getPassword())) {
             throw new BusinessException(MasterExceptionEnum.NOT_BLANK, I18nParamConstant.PARAM_PASSWORD);
         }
+        if (bo.getEnabled()==null) {
+            throw new BusinessException(MasterExceptionEnum.NOT_BLANK, I18nParamConstant.PARAM_ENABLED);
+        }
         if (!bo.getUsername().matches(USERNAME_REGEX)) {
             throw new BusinessException(MasterExceptionEnum.INVALID, I18nParamConstant.PARAM_USERNAME);
         }
         if (StringUtils.isNotBlank(bo.getNickname()) && !bo.getNickname().matches(CN_NAME_REGEX)) {
             throw new BusinessException(MasterExceptionEnum.INVALID, I18nParamConstant.PARAM_USERNAME);
         }
-        List<Integer> roleIdList = validateRoleIdList4Create(bo.getRoleNameList());
+        Integer roleId = validateRoleIdList4Create(bo.getRoleType());
 
         TbSysUser queryByUsername = tbSysUserDao.selectOne(Wrappers.lambdaQuery(TbSysUser.class).eq(TbSysUser::getUsername, bo.getUsername()).last(LAST_SQL_LIMIT_1));
         if (queryByUsername != null) {
@@ -128,17 +139,16 @@ public class UserService {
         TbSysUser tbSysUser = buildTbSysUser4Create(bo);
 
         // 创建user
+        tbSysUser.setLoggedFlag(true);
         int insertCount = tbSysUserDao.insert(tbSysUser);
         if (insertCount == 0) {
             return 0;
         }
         // 创建用户角色列表
-        for (Integer roleId : roleIdList) {
-            TbSysUserRole tbSysUserRole = new TbSysUserRole();
-            tbSysUserRole.setUserId(tbSysUser.getId());
-            tbSysUserRole.setRoleId(roleId);
-            tbSysUserRoleDao.insert(tbSysUserRole);
-        }
+        TbSysUserRole tbSysUserRole = new TbSysUserRole();
+        tbSysUserRole.setUserId(tbSysUser.getId());
+        tbSysUserRole.setRoleId(roleId);
+        tbSysUserRoleDao.insert(tbSysUserRole);
         return insertCount;
     }
 
@@ -163,6 +173,9 @@ public class UserService {
         if (StringUtils.isNotBlank(bo.getNickname()) && !bo.getNickname().matches(CN_NAME_REGEX)) {
             throw new BusinessException(MasterExceptionEnum.INVALID, I18nParamConstant.PARAM_USERNAME);
         }
+        if (bo.getEnabled()==null) {
+            throw new BusinessException(MasterExceptionEnum.NOT_BLANK, I18nParamConstant.PARAM_ENABLED);
+        }
         // id存在性校验
         TbSysUser oldUser = tbSysUserDao.selectById(bo.getId());
         if (oldUser == null) {
@@ -173,13 +186,13 @@ public class UserService {
             throw new BusinessException(MasterExceptionEnum.NO_PERMISSION_OPERATE, I18nParamConstant.PARAM_USER);
         }
         // roleId校验
-        List<Integer> roleIdList = validateRoleIdList4Update(bo.getRoleNameList());
+        Integer roleId = validateRoleIdList4Update(bo.getRoleType());
 
         // 构建需要更新的user对象
         TbSysUser tbSysUser4Update = buildTbSysUser4Update(bo);
 
         // 更新userRole
-        boolean roleChanged = modifyUserRoleList(bo, roleIdList);
+        boolean roleChanged = modifyUserRoleList(bo, roleId);
 
         // 更新user
         int count = tbSysUserDao.updateById(tbSysUser4Update);
@@ -448,11 +461,12 @@ public class UserService {
     }
 
     /**
-     * @param bo              对象
-     * @param inputRoleIdList 入参的角色列表
+     * @param bo         对象
+     * @param userRoleId 入参的角色列表
      * @return 角色是否变化
      */
-    private boolean modifyUserRoleList(UpdateUserRequestBo bo, List<Integer> inputRoleIdList) {
+    private boolean modifyUserRoleList(UpdateUserRequestBo bo, Integer userRoleId) {
+        List<Integer> inputRoleIdList = Lists.newArrayList(userRoleId);
         if (CollectionUtils.isEmpty(inputRoleIdList)) {
             return false;
         }
@@ -567,34 +581,26 @@ public class UserService {
         return tbSysUser;
     }
 
-    private List<Integer> validateRoleIdList4Create(List<String> roleList) {
-        if (CollectionUtils.isEmpty(roleList)) {
+    private Integer validateRoleIdList4Create(String roleType) {
+        if (StringUtils.isBlank(roleType)) {
             throw new BusinessException(MasterExceptionEnum.NOT_EMPTY, I18nParamConstant.PARAM_ROLE_LIST);
         }
-        List<String> distinctRoleList = roleList.stream().filter(StringUtils::isNotBlank).map(StringUtils::trim).distinct().collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(distinctRoleList)) {
-            throw new BusinessException(MasterExceptionEnum.INVALID, I18nParamConstant.PARAM_ROLE_LIST);
-        }
-        List<TbSysRole> tbSysRoles = tbSysRoleDao.selectList(Wrappers.lambdaQuery(TbSysRole.class).in(TbSysRole::getRole, distinctRoleList));
-        if (CollectionUtils.size(tbSysRoles) < CollectionUtils.size(distinctRoleList)) {
+        List<TbSysRole> tbSysRoles = tbSysRoleDao.selectList(Wrappers.lambdaQuery(TbSysRole.class).eq(TbSysRole::getRole, roleType));
+        if (CollectionUtils.size(tbSysRoles) < 1) {
             throw new BusinessException(MasterExceptionEnum.NOT_EXIST, I18nParamConstant.PARAM_ROLE_ID);
         }
-        return tbSysRoles.stream().map(TbSysRole::getId).collect(Collectors.toList());
+        return tbSysRoles.get(0).getId();
     }
 
-    private List<Integer> validateRoleIdList4Update(List<String> roleList) {
-        if (CollectionUtils.isEmpty(roleList)) {
-            return Collections.emptyList();
+    private Integer validateRoleIdList4Update(String roleType) {
+        if (StringUtils.isBlank(roleType)) {
+            throw new BusinessException(MasterExceptionEnum.NOT_EMPTY, I18nParamConstant.PARAM_ROLE_LIST);
         }
-        List<String> distinctRoleList = roleList.stream().filter(StringUtils::isNotBlank).map(StringUtils::trim).distinct().collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(distinctRoleList)) {
-            return Collections.emptyList();
-        }
-        List<TbSysRole> tbSysRoles = tbSysRoleDao.selectList(Wrappers.lambdaQuery(TbSysRole.class).in(TbSysRole::getRole, distinctRoleList));
-        if (CollectionUtils.size(tbSysRoles) < CollectionUtils.size(distinctRoleList)) {
+        List<TbSysRole> tbSysRoles = tbSysRoleDao.selectList(Wrappers.lambdaQuery(TbSysRole.class).eq(TbSysRole::getRole, roleType));
+        if (CollectionUtils.size(tbSysRoles) < 1) {
             throw new BusinessException(MasterExceptionEnum.NOT_EXIST, I18nParamConstant.PARAM_ROLE_ID);
         }
-        return tbSysRoles.stream().map(TbSysRole::getId).collect(Collectors.toList());
+        return tbSysRoles.get(0).getId();
     }
 
     private PageQueryUserResponseBo buildPageResponseBo(PageQueryUserBo userBo, PageQueryUserVo pageQueryVo) {
@@ -603,13 +609,8 @@ public class UserService {
         responseBo.setUsername(userBo.getUsername());
 
         responseBo.setNickname(userBo.getNickname());
-        if (UserExpireType.TEMPORARY.getType().equals(userBo.getExpireType()) && userBo.getExpireDate() != null) {
-            responseBo.setExpireDate(userBo.getExpireDate());
-            responseBo.setExpired(LocalDateTime.now().isAfter(userBo.getExpireDate()));
-        } else {
-            responseBo.setExpired(false);
-        }
-        responseBo.setLocked(BooleanUtils.isNotTrue(userBo.getEnabled()) || pageQueryVo.getLockedUsernames().contains(userBo.getUsername()));
+        responseBo.setCreateTime(userBo.getCreateTime());
+        responseBo.setEnabled(userBo.getEnabled());
 
         List<TbSysRole> tbRoleList;
         if (pageQueryVo.getRoleId() != null) {
@@ -617,8 +618,8 @@ public class UserService {
         } else {
             tbRoleList = tbSysRoleDao.selectBatchIds(buildRoleIdList(userBo.getRoleIds()));
         }
-        responseBo.setRoleNameList(tbRoleList.stream().map(TbSysRole::getRole).distinct().collect(Collectors.toList()));
-        responseBo.setBuiltinFlag(userBo.getBuiltinFlag());
+        responseBo.setRoleType(tbRoleList.get(0).getRole());
+        responseBo.setAccountBalance(userBo.getAccountBalance());
         return responseBo;
     }
 
@@ -630,7 +631,7 @@ public class UserService {
         pageQueryVo.setOffset(page.getPageSize());
         pageQueryVo.setUsername(StringUtils.trimToNull(bo.getUsername()));
         pageQueryVo.setRoleId(roleId);
-        pageQueryVo.setStatus(bo.getStatus());
+        pageQueryVo.setEnabled(bo.getEnabled());
         pageQueryVo.setLockedUsernames(new ArrayList<>(loginRetryCountService.getAllUsername()));
         return pageQueryVo;
     }

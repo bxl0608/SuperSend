@@ -7,7 +7,7 @@
     <conversionRule conversionWord="wEx"
                     converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
 
-    <property name="logging.file" value="apply-monitor-portal.log"/>
+    <property name="logging.file" value="super-send-portal.log"/>
     <property name="logging.path" value="logs"/>
 
     <property name="CONSOLE_LOG_PATTERN"

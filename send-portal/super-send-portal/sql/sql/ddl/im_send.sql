@@ -71,9 +71,28 @@ CREATE TABLE tb_sys_user
     logged_flag          tinyint(1) UNSIGNED ZEROFILL NOT NULL COMMENT '0-已登录，1-未登录过',
     password_update_time datetime                              DEFAULT NULL COMMENT '密码更新时间',
     create_time          datetime                     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    account_balance      int(11)                     NOT NULL DEFAULT 0 COMMENT '账户余额',
+    account_balance      NUMERIC(10, 4)               NOT NULL DEFAULT 0.0000 COMMENT '账户余额',
     update_time          datetime                              DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     delete_flag          tinyint(1)                   NOT NULL COMMENT '删除符 已删除 1，未删除 0 ',
+    PRIMARY KEY (id)
+)
+    ENGINE = INNODB,
+    CHARACTER SET utf8mb4,
+    COLLATE utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `account_detail`;
+CREATE TABLE account_detail
+(
+    id                   int(11)                      NOT NULL AUTO_INCREMENT,
+    user_id              int(11)                      NOT NULL  COMMENT '用户id',
+    operator_id          int(11)                      NOT NULL  COMMENT '操作人id',
+    change_type          tinyint(4)                   NOT NULL DEFAULT 1 COMMENT '1:系统充值,2:用户消费',
+    order_number         varchar(50)                  NOT NULL DEFAULT '' COMMENT '订单号',
+    change_amount        varchar(50)                  NOT NULL DEFAULT '' COMMENT '变动金额',
+    change_before_amount NUMERIC(10, 4)               NOT NULL  COMMENT '变动前余额',
+    change_after_amount  NUMERIC(10, 4)               NOT NULL COMMENT '变动后余额',
+    remarks              varchar(500)                 DEFAULT '' COMMENT '备注',
+    create_time          datetime                     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (id)
 )
     ENGINE = INNODB,

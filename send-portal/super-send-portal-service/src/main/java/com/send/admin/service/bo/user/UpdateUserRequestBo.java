@@ -22,7 +22,7 @@ public class UpdateUserRequestBo {
     private Integer id;
 
     @ApiModelProperty("角色列表")
-    private List<String> roleNameList;
+    private String roleType;
 
     @ApiModelProperty("昵称或者全名")
     private String nickname;
@@ -30,7 +30,7 @@ public class UpdateUserRequestBo {
     @ApiModelProperty("0-永久，1-临时")
     private Integer expireType;
 
-    @ApiModelProperty("账号启用禁用状态")
+    @ApiModelProperty("账号启用禁用状态,1-正常，0-封禁")
     private Boolean enabled;
 
     @ApiModelProperty("有效期")
