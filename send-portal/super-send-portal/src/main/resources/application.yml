@@ -53,5 +53,6 @@ mybatis:
 ### 接口匿名访问
 auth:
   anonymous: /portal/auth/login,/portal/auth/publicRsaKeyEncrypt
-  validateUpdatePwd: ## 无需判断是否为首次登录的url
-    exclude: /portal/config/pw,/portal/user/updatePwd,/portal/auth/login,/portal/auth/publicRsaKeyEncrypt,/portal/permission/listRouter,/portal/auth/logout
+  openapi:
+    token: 568d982048444d80985016125c97777d68a6
+    paths: /portal/openapi/test

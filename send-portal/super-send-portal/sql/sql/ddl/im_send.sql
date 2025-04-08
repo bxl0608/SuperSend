@@ -85,7 +85,9 @@ CREATE TABLE account_detail
 (
     id                   int(11)                      NOT NULL AUTO_INCREMENT,
     user_id              int(11)                      NOT NULL  COMMENT '用户id',
+    username             varchar(50)                  DEFAULT ''  COMMENT '充值账户用户名',
     operator_id          int(11)                      NOT NULL  COMMENT '操作人id',
+    operator_username    varchar(50)                  DEFAULT ''  COMMENT '操作人用户名',
     change_type          tinyint(4)                   NOT NULL DEFAULT 1 COMMENT '1:系统充值,2:用户消费',
     order_number         varchar(50)                  NOT NULL DEFAULT '' COMMENT '订单号',
     change_amount        varchar(50)                  NOT NULL DEFAULT '' COMMENT '变动金额',

@@ -62,6 +62,10 @@ public enum MasterExceptionEnum implements ExceptionType {
     ERR_TRACE_ATTACKER_NOT_EXIST("4019001", "攻击者不存在"),
     ERR_TRACE_MARK_DUP("4019002", "标签已存在"),
 
+    USER_BALANCE_INADEQUATE("4019003", "用户余额不足"),
+
+    USER_BALANCE_LIMIT("4019004", "金额大于上限值9999999999.9999"),
+
     INVALID("4000000", I18nMsgKeyConstant.INVALID),
     NOT_NULL("4000001", I18nMsgKeyConstant.NOT_NULL),
     NOT_BLANK("4000002", I18nMsgKeyConstant.NOT_BLANK),

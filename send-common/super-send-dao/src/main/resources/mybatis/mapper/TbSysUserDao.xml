@@ -48,7 +48,7 @@
         <include refid="pageFromSql"/>
         )
         AS tmp
-        ORDER BY tmp.minRoleId asc, tmp.expire_date desc
+        ORDER BY tmp.create_time asc
         LIMIT #{input.from}, #{input.offset}
     </select>
 

@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.util.List;
 
+import static com.send.admin.filter.OpenapiCheckFilter.BYPASS_ATTRIBUTE;
+
 /**
  * @author WangCheng
  * @version 1.0
@@ -57,6 +59,10 @@ public class AuthApiCheckFilter implements Filter {
         boolean anonymousEnabled = AuthApiAnonymousFilter.anonymousEnabled(servletRequest);
         if (anonymousEnabled) {
             filterChain.doFilter(request, wrapper);
+            return;
+        }
+        if (request.getAttribute(BYPASS_ATTRIBUTE) != null) {
+            filterChain.doFilter(request, response);
             return;
         }
 

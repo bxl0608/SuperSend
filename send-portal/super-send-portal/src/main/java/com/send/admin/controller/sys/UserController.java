@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,7 @@ public class UserController {
 
     @PostMapping("/recharge")
     @ApiOperation(value = "充值")
-    public CommonResponse<BigDecimal> recharge(@RequestBody RechargeUserRequestVo vo) {
+    public CommonResponse<BigDecimal> recharge(@Validated @RequestBody RechargeUserRequestVo vo) {
         BigDecimal count = userService.recharge(vo);
         return CommonResponse.builder(count).build();
     }
@@ -62,7 +63,7 @@ public class UserController {
 
     @PostMapping("/enable")
     @ApiOperation(value = "管理员激活或封锁用户")
-    public CommonResponse<Integer> updateEnabled(@RequestBody UpdateUserEnabledRequestVo vo) {
+    public CommonResponse<Integer> updateEnabled(@Validated @RequestBody UpdateUserEnabledRequestVo vo) {
         int count = userService.updateEnabledByAdmin(vo);
         return CommonResponse.builder(count).build();
     }

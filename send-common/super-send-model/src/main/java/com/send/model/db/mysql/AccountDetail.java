@@ -31,9 +31,18 @@ public class AccountDetail  implements Serializable {
     private Integer userId;
 
     /**
+     * 用户名
+     */
+    private String username;
+    /**
      * 操作人id
      */
     private Integer operatorId;
+
+    /**
+     * 操作人用户名
+     */
+    private String operatorUsername;
 
     /**
      * 1:系统充值,2:用户消费

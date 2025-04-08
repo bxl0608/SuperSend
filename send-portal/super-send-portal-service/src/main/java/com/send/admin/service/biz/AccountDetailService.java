@@ -62,22 +62,22 @@ public class AccountDetailService {
         Page<AccountDetail> page = PageTool.buildPage(requestBo.getPage());
         LambdaQueryWrapper<AccountDetail> accountDetailLambdaQueryWrapper = Wrappers.lambdaQuery(AccountDetail.class);
         if (requestBo.getChangeType() != null) {
-            accountDetailLambdaQueryWrapper.eq(AccountDetail::getChangeType,requestBo.getChangeType());
+            accountDetailLambdaQueryWrapper.eq(AccountDetail::getChangeType, requestBo.getChangeType());
         }
         if (StringUtils.isNotBlank(requestBo.getOrderNumber())) {
-            accountDetailLambdaQueryWrapper.like(AccountDetail::getOrderNumber,requestBo.getOrderNumber());
+            accountDetailLambdaQueryWrapper.like(AccountDetail::getOrderNumber, requestBo.getOrderNumber());
         }
-        if(requestBo.getStartTime()!=null){
-            accountDetailLambdaQueryWrapper.ge(AccountDetail::getCreateTime,requestBo.getStartTime());
+        if (requestBo.getStartTime() != null) {
+            accountDetailLambdaQueryWrapper.ge(AccountDetail::getCreateTime, requestBo.getStartTime());
         }
-        if(requestBo.getEndTime()!=null){
-            accountDetailLambdaQueryWrapper.le(AccountDetail::getCreateTime,requestBo.getEndTime());
+        if (requestBo.getEndTime() != null) {
+            accountDetailLambdaQueryWrapper.le(AccountDetail::getCreateTime, requestBo.getEndTime());
         }
         UserDetail userDetail = ThreadContext.get(AuthService.KEY_USER_DETAIL);
         if (userDetail == null) {
             throw new BusinessException(MasterExceptionEnum.ERR_ACCESS_DENY);
         }
-        accountDetailLambdaQueryWrapper.eq(AccountDetail::getUserId,userDetail.getId());
+        accountDetailLambdaQueryWrapper.eq(AccountDetail::getUserId, userDetail.getId());
         accountDetailLambdaQueryWrapper.orderByDesc(AccountDetail::getCreateTime);
         Page<AccountDetail> accountDetailPage = accountDetailDao.selectPage(page, accountDetailLambdaQueryWrapper);
         return PageTool.buildPageList(accountDetailPage.getRecords(), page);
@@ -92,14 +92,20 @@ public class AccountDetailService {
      */
     public void addAccountDetail(RechargeUserRequestBo bo, TbSysUser sysUser, BigDecimal mount) {
         AccountDetail accountDetail = new AccountDetail();
-        accountDetail.setChangeAmount("+" + bo.getAccountBalance());
-        accountDetail.setChangeType(ChangeTypeEnum.SYSTEM_TOP_UP.getType());
+        if (bo.getChangeType() == 2) {
+            accountDetail.setChangeAmount("-" + bo.getAccountBalance());
+        } else {
+            accountDetail.setChangeAmount("+" + bo.getAccountBalance());
+        }
+        accountDetail.setChangeType(bo.getChangeType());
         accountDetail.setRemarks(bo.getRemarks());
         accountDetail.setCreateTime(LocalDateTime.now());
         accountDetail.setUserId(bo.getId());
+        accountDetail.setUsername(sysUser.getUsername());
         accountDetail.setChangeAfterAmount(mount);
         UserDetail userDetail = validateLoginUserIsAdmin();
         accountDetail.setOperatorId(userDetail.getId());
+        accountDetail.setOperatorUsername(userDetail.getUsername());
         accountDetail.setOrderNumber(buildOrderNumberShow());
         accountDetail.setChangeBeforeAmount(sysUser.getAccountBalance());
         accountDetailDao.insert(accountDetail);

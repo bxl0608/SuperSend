@@ -1,5 +1,6 @@
 package com.send.admin.service.bo.user;
 
+import com.project.base.validation.annotation.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,8 +17,10 @@ import lombok.Data;
 public class UpdateUserEnabledRequestBo {
 
     @ApiModelProperty("id")
+    @NotNull(message = "用户id不能为空")
     private Integer id;
 
+    @NotNull(message = "状态不能为空")
     @ApiModelProperty("账号启用禁用状态")
     private Boolean enabled;
 }

@@ -37,4 +37,6 @@ public class PageQueryUserResponseBo {
      * 创建时间
      */
     private LocalDateTime createTime;
+
+    private Boolean builtinFlag;
 }

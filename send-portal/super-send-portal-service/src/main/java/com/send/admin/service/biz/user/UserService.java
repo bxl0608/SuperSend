@@ -92,7 +92,18 @@ public class UserService {
         if (tbSysUser == null) {
             throw new BusinessException(MasterExceptionEnum.NOT_EXIST, I18nParamConstant.PARAM_ID);
         }
-        BigDecimal mount = tbSysUser.getAccountBalance().add(bo.getAccountBalance());
+        BigDecimal mount;
+        if (bo.getChangeType() == 2) {
+            if (tbSysUser.getAccountBalance().compareTo(bo.getAccountBalance()) < 0) {
+                throw new BusinessException(MasterExceptionEnum.USER_BALANCE_INADEQUATE);
+            }
+            mount = tbSysUser.getAccountBalance().subtract(bo.getAccountBalance());
+        } else {
+            mount = tbSysUser.getAccountBalance().add(bo.getAccountBalance());
+        }
+        if (new BigDecimal(9999999999.9999).compareTo(mount) < 0) {
+            throw new BusinessException(MasterExceptionEnum.USER_BALANCE_LIMIT);
+        }
         accountDetailService.addAccountDetail(bo, tbSysUser, mount);
         tbSysUser.setAccountBalance(mount);
         tbSysUserDao.updateById(tbSysUser);
@@ -120,7 +131,7 @@ public class UserService {
         if (StringUtils.isBlank(bo.getPassword())) {
             throw new BusinessException(MasterExceptionEnum.NOT_BLANK, I18nParamConstant.PARAM_PASSWORD);
         }
-        if (bo.getEnabled()==null) {
+        if (bo.getEnabled() == null) {
             throw new BusinessException(MasterExceptionEnum.NOT_BLANK, I18nParamConstant.PARAM_ENABLED);
         }
         if (!bo.getUsername().matches(USERNAME_REGEX)) {
@@ -173,7 +184,7 @@ public class UserService {
         if (StringUtils.isNotBlank(bo.getNickname()) && !bo.getNickname().matches(CN_NAME_REGEX)) {
             throw new BusinessException(MasterExceptionEnum.INVALID, I18nParamConstant.PARAM_USERNAME);
         }
-        if (bo.getEnabled()==null) {
+        if (bo.getEnabled() == null) {
             throw new BusinessException(MasterExceptionEnum.NOT_BLANK, I18nParamConstant.PARAM_ENABLED);
         }
         // id存在性校验
@@ -611,7 +622,7 @@ public class UserService {
         responseBo.setNickname(userBo.getNickname());
         responseBo.setCreateTime(userBo.getCreateTime());
         responseBo.setEnabled(userBo.getEnabled());
-
+        responseBo.setBuiltinFlag(userBo.getBuiltinFlag());
         List<TbSysRole> tbRoleList;
         if (pageQueryVo.getRoleId() != null) {
             tbRoleList = tbSysRoleDao.findByUserId(responseBo.getId());
