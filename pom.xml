@@ -11,6 +11,7 @@
         <module>send-common/super-send-model</module>
         <module>send-portal/super-send-portal</module>
         <module>send-portal/super-send-portal-service</module>
+        <module>send-common/whatsapp-api</module>
     </modules>
     <packaging>pom</packaging>
 
