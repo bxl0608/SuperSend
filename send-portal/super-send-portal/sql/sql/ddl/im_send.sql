@@ -134,3 +134,36 @@ CREATE TABLE tb_config
     CHARACTER SET utf8mb4,
     COLLATE utf8mb4_general_ci,
     COMMENT = '系统参数配置';
+
+DROP TABLE IF EXISTS `material_library`;
+CREATE TABLE material_library
+(
+    id          int(11)       NOT NULL AUTO_INCREMENT COMMENT 'id',
+    name        varchar(50)   NOT NULL COMMENT '素材名称',
+    content     varchar(300)  NOT NULL COMMENT '素材内容',
+    type        integer       NOT NULL DEFAULT 1 COMMENT '素材类型，1:文字类型（目前只有文字类型）',
+    remarks     varchar(500)  NOT NULL COMMENT '备注',
+    create_time datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time datetime      DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (id)
+)
+    ENGINE = INNODB,
+    CHARACTER SET utf8mb4,
+    COLLATE utf8mb4_general_ci,
+    COMMENT = '素材库';
+
+DROP TABLE IF EXISTS `quick_reply_customer`;
+CREATE TABLE quick_reply_customer
+(
+    id          int(11)       NOT NULL AUTO_INCREMENT COMMENT 'id',
+    user_id     int(11)       NOT NULL COMMENT '用户id',
+    content     varchar(300)  NOT NULL COMMENT '快捷回复内容',
+    type        integer       NOT NULL DEFAULT 1 COMMENT '快捷回复类型，1:文字类型（目前只有文字类型）',
+    create_time datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time datetime      DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (id)
+)
+    ENGINE = INNODB,
+    CHARACTER SET utf8mb4,
+    COLLATE utf8mb4_general_ci,
+    COMMENT = '客服快捷回复';
