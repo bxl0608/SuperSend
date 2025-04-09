@@ -26,7 +26,7 @@ public class OpenApiConfig {
     @Value("#{'${auth.openapi.paths:/portal/openapi/test,/protal/openapi/*}'.split('\\s*,\\s*')}")
     private Set<String> excludeOpenapiPaths;
 
-    @Value("${auth.openapi.token:568d982048444d80985016125c97777d}")
+    @Value("${auth.openapi.token:568d982048444d80985016125c97777d68a6}")
     private String openapiToken;
 
     @Autowired

@@ -72,7 +72,7 @@ public class AccountDetail  implements Serializable {
     /**
      * 备注
      */
-    private String remarks = "";
+    private String remarks;
 
     /**
      * 创建时间

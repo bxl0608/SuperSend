@@ -1,0 +1,22 @@
+package com.send.admin.service.bo.reply;
+
+import com.project.base.validation.annotation.NotNull;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+/**
+ * @author WangCheng
+ * @version 1.0
+ * @CreateTime: 2025-04-09 21:27
+ * @Description:
+ * @Company: Information Technology Company
+ */
+@ApiModel("删除素材")
+@Data
+public class DeleteQuickReplyCustomerRequestBo {
+
+    @ApiModelProperty("id")
+    @NotNull(message = "客服快捷回复id不能为空")
+    private Integer id;
+}

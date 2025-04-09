@@ -37,6 +37,6 @@ public class RechargeUserRequestBo {
     private BigDecimal accountBalance;
 
     @ApiModelProperty("备注")
-    @Length(max = 500, message = "字段长度不能超过500个字符")
+    @Length(max = 500, message = "备注长度不能超过500个字符")
     private String remarks;
 }

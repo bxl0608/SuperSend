@@ -132,6 +132,12 @@ public enum MasterExceptionEnum implements ExceptionType {
      * 类型不存在
      */
     TYPE_NOT_EXIST("4038002", "类型不存在"),
+    ERR_EDIT_FORBIDDEN("4039001", "您无权编辑该资源"),
+    MATERIAL_NAME_SAME("4039002", "素材名称重名"),
+    CUSTOMER_NAME_SAME("4039003", "客服用户名重名"),
+    CUSTOMER_NAME_NOT_MATCH_PHONE_NUMBER("4039004", "客服用户名必须为11位手机号"),
+    CUSTOMER_SERVICE_ONLINE("4039005", "客服在线不允许被删除"),
+    QUICK_REPLY_NAME_SAME("4039006", "快捷回复内容重复"),
     ;
 
 

@@ -139,6 +139,8 @@ DROP TABLE IF EXISTS `material_library`;
 CREATE TABLE material_library
 (
     id          int(11)       NOT NULL AUTO_INCREMENT COMMENT 'id',
+    user_id     int(11)       NOT NULL COMMENT '创建用户id',
+    user_name   varchar(20)   NOT NULL COMMENT '用户名',
     name        varchar(50)   NOT NULL COMMENT '素材名称',
     content     varchar(300)  NOT NULL COMMENT '素材内容',
     type        integer       NOT NULL DEFAULT 1 COMMENT '素材类型，1:文字类型（目前只有文字类型）',
@@ -157,6 +159,7 @@ CREATE TABLE quick_reply_customer
 (
     id          int(11)       NOT NULL AUTO_INCREMENT COMMENT 'id',
     user_id     int(11)       NOT NULL COMMENT '用户id',
+    user_name   varchar(20)   NOT NULL COMMENT '用户名',
     content     varchar(300)  NOT NULL COMMENT '快捷回复内容',
     type        integer       NOT NULL DEFAULT 1 COMMENT '快捷回复类型，1:文字类型（目前只有文字类型）',
     create_time datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -167,3 +170,21 @@ CREATE TABLE quick_reply_customer
     CHARACTER SET utf8mb4,
     COLLATE utf8mb4_general_ci,
     COMMENT = '客服快捷回复';
+
+DROP TABLE IF EXISTS `customer_service_management`;
+CREATE TABLE customer_service_management
+(
+    id          int(11)       NOT NULL AUTO_INCREMENT COMMENT 'id',
+    user_id     int(11)       NOT NULL COMMENT '用户id',
+    user_name   varchar(20)   NOT NULL COMMENT '用户名',
+    customer_name varchar(20) NOT NULL COMMENT '客服用户名，必须为11位手机号',
+    status        integer     NOT NULL DEFAULT 1 COMMENT '客服状态，1:离线状态',
+    remarks     varchar(500)  NOT NULL COMMENT '备注',
+    create_time datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time datetime      DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (id)
+)
+    ENGINE = INNODB,
+    CHARACTER SET utf8mb4,
+    COLLATE utf8mb4_general_ci,
+    COMMENT = '客服管理';

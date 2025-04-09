@@ -41,4 +41,7 @@ VALUES
 (164, NULL, 2, '/portal/user/updatePwd', 0, '', '', '', '2023-03-22 00:00:00'),
 (165, NULL, 2, '/portal/user/resetPwd', 0, '', '', '', '2023-03-22 00:00:00'),
 (166, NULL, 2, '/portal/user/delete', 0, '', '', '', '2023-03-22 00:00:00'),
-(167, NULL, 2, '/portal/user/recharge', 0, '', '', '', '2023-03-22 00:00:00');
+(167, NULL, 2, '/portal/user/recharge', 0, '', '', '', '2023-03-22 00:00:00'),
+(170, NULL, 2, '/portal/materialLibrary/*', 0, '', '', '', '2023-03-22 00:00:00'),
+(171, NULL, 2, '/portal/customerServiceManagement/*', 0, '', '', '', '2023-03-22 00:00:00'),
+(172, NULL, 2, '/portal/quickReplyCustomer/*', 0, '', '', '', '2023-03-22 00:00:00');

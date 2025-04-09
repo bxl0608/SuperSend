@@ -1,9 +1,8 @@
 package com.send.dao.mysql;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.send.dao.repository.AccountDetailDao;
-import com.send.model.db.mysql.AccountDetail;
-import com.send.model.db.mysql.TbConfig;
+import com.send.dao.repository.QuickReplyCustomerDao;
+import com.send.model.db.mysql.QuickReplyCustomer;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,6 +13,6 @@ import org.springframework.stereotype.Repository;
  * @Company: Information Technology Company
  */
 @Repository
-public interface AccountDetailDao4Mysql extends AccountDetailDao, BaseMapper<AccountDetail> {
+public interface QuickReplyCustomerDao4Mysql extends QuickReplyCustomerDao, BaseMapper<QuickReplyCustomer> {
 
 }
