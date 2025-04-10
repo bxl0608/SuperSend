@@ -1,10 +1,12 @@
 package com.send.admin.service.biz.sys;
 
+import com.send.admin.service.biz.config.I18nService;
 import com.send.model.auth.UserDetail;
 import com.send.model.db.mysql.TbSysPermission;
 import com.send.model.enums.PermissionTypeEnum;
 import com.send.admin.service.bo.sys.RouterResponseBO;
 import com.project.base.common.thread.ThreadContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class PermissionService {
+    @Autowired
+    private I18nService i18nService;
 
     /**
      * 列出router集合
@@ -46,7 +50,8 @@ public class PermissionService {
             RouterResponseBO.FrontRouter firstLevelFrontRouter = new RouterResponseBO.FrontRouter();
             firstLevelFrontRouter.setRouter(firstLevelPermission.getFrontRouter());
             firstLevelFrontRouter.setIcon(firstLevelPermission.getFrontIcon());
-            firstLevelFrontRouter.setMenuName(firstLevelPermission.getFrontMenuName());
+            //firstLevelFrontRouter.setMenuName(firstLevelPermission.getFrontMenuName());
+            firstLevelFrontRouter.setMenuName(i18nService.getMessage(firstLevelPermission.getFrontRouter()));
             firstLevelRouterList.add(firstLevelFrontRouter);
 
             /* 第二级 */
@@ -61,7 +66,8 @@ public class PermissionService {
                 RouterResponseBO.FrontRouter secondLevelFrontRouter = new RouterResponseBO.FrontRouter();
                 secondLevelFrontRouter.setRouter(secondLevelPermission.getFrontRouter());
                 secondLevelFrontRouter.setIcon(secondLevelPermission.getFrontIcon());
-                secondLevelFrontRouter.setMenuName(secondLevelPermission.getFrontMenuName());
+                //secondLevelFrontRouter.setMenuName(secondLevelPermission.getFrontMenuName());
+                secondLevelFrontRouter.setMenuName(i18nService.getMessage(secondLevelPermission.getFrontRouter()));
                 secondLevelRouterList.add(secondLevelFrontRouter);
 
                 /* 第三级，目前这块业务设计不合理，最终要去掉 shit code */
