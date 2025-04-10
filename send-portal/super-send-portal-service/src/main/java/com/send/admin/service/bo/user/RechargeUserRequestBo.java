@@ -25,15 +25,16 @@ public class RechargeUserRequestBo {
     private Integer id;
 
     /**
-     * 变动类型1:系统充值,2:用户消费
+     * 变动类型1:系统变动,2:用户消费
      */
     @NotNull(message = "变动类型不能为空")
-    @Min(value = 1, message = "值不能小于1")
-    @Max(value = 2, message = "值不能大于2")
+    @Min(value = 1, message = "充值变动类型固定值1")
+    @Max(value = 1, message = "充值变动类型固定值1")
     private Integer changeType;
     @NotNull(message = "变动金额不能为空")
     @ApiModelProperty("变动金额")
-    @DecimalMin(value = "0.0000", inclusive = false, message = "变动金额必须大于0")
+    @DecimalMin(value = "-9999999999.9999", inclusive = true, message = "变动金额必须大于等于-9999999999.9999")
+    @DecimalMax(value = "9999999999.9999", inclusive = true, message = "变动金额必须小于等于9999999999.9999")
     private BigDecimal accountBalance;
 
     @ApiModelProperty("备注")

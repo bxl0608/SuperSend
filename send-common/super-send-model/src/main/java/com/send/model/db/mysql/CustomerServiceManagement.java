@@ -43,7 +43,7 @@ public class CustomerServiceManagement implements Serializable {
     private String customerName;
 
     /**
-     * 客服状态，1:离线状态 2:在线状态
+     * 客服状态，1:启用
      */
     private Integer status;
 

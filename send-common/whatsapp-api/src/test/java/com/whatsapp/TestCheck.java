@@ -12,9 +12,9 @@ public class TestCheck {
 //        String phone = "819058951353";
 //        String phone = "12179960000";
         String phone = "8616688889999";
-        String version = "2.25.10.72";
+        String version = "2.25.10.72";//配置文件
 
-        WhatsappAccountStatus whatsappAccountStatus = WhatsappChecker.checkBlock(phone, version, proxy);
+        WhatsappAccountStatus whatsappAccountStatus = WhatsappChecker.checkBlock(phone, version, null);
         System.out.println(whatsappAccountStatus);
     }
 }

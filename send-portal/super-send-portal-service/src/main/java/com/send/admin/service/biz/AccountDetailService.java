@@ -92,10 +92,10 @@ public class AccountDetailService {
      */
     public void addAccountDetail(RechargeUserRequestBo bo, TbSysUser sysUser, BigDecimal mount) {
         AccountDetail accountDetail = new AccountDetail();
-        if (bo.getChangeType() == 2) {
-            accountDetail.setChangeAmount("-" + bo.getAccountBalance());
+        if (hasPlusSign(bo.getAccountBalance())) {
+            accountDetail.setChangeAmount(bo.getAccountBalance().toString());
         } else {
-            accountDetail.setChangeAmount("+" + bo.getAccountBalance());
+            accountDetail.setChangeAmount("+" + bo.getAccountBalance().toString());
         }
         accountDetail.setChangeType(bo.getChangeType());
         accountDetail.setRemarks(bo.getRemarks());
@@ -109,6 +109,10 @@ public class AccountDetailService {
         accountDetail.setOrderNumber(buildOrderNumberShow());
         accountDetail.setChangeBeforeAmount(sysUser.getAccountBalance());
         accountDetailDao.insert(accountDetail);
+    }
+
+    public boolean hasPlusSign(BigDecimal number) {
+        return number.toString().startsWith("+");
     }
 
     private UserDetail validateLoginUserIsAdmin() {

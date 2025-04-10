@@ -2,10 +2,21 @@ package com.send.admin.service.biz.user;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Lists;
+import com.project.base.common.thread.ThreadContext;
+import com.project.base.model.exception.BusinessException;
+import com.project.base.model.pagination.PageList;
+import com.project.base.model.pagination.PageRequest;
+import com.project.base.mysql.pagination.PageTool;
 import com.send.admin.service.biz.AccountDetailService;
+import com.send.admin.service.biz.sys.AuthService;
+import com.send.admin.service.biz.sys.LoginRetryCountService;
+import com.send.admin.service.biz.sys.TokenService;
+import com.send.admin.service.biz.sys.auth.UserDetailProcessor;
+import com.send.admin.service.bo.user.*;
+import com.send.admin.service.tool.PageValidateTool;
+import com.send.admin.service.tool.RsaLocalTool;
 import com.send.common.security.PasswordTool;
 import com.send.common.tool.TypeConvertTool;
-import com.send.dao.repository.AccountDetailDao;
 import com.send.dao.repository.TbSysRoleDao;
 import com.send.dao.repository.TbSysUserDao;
 import com.send.dao.repository.TbSysUserRoleDao;
@@ -19,18 +30,6 @@ import com.send.model.enums.UserExpireType;
 import com.send.model.enums.UserRoleEnum;
 import com.send.model.exception.MasterExceptionEnum;
 import com.send.model.i18n.I18nParamConstant;
-import com.send.admin.service.biz.sys.AuthService;
-import com.send.admin.service.biz.sys.LoginRetryCountService;
-import com.send.admin.service.biz.sys.TokenService;
-import com.send.admin.service.biz.sys.auth.UserDetailProcessor;
-import com.send.admin.service.bo.user.*;
-import com.send.admin.service.tool.PageValidateTool;
-import com.send.admin.service.tool.RsaLocalTool;
-import com.project.base.common.thread.ThreadContext;
-import com.project.base.model.exception.BusinessException;
-import com.project.base.model.pagination.PageList;
-import com.project.base.model.pagination.PageRequest;
-import com.project.base.mysql.pagination.PageTool;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -93,16 +92,12 @@ public class UserService {
             throw new BusinessException(MasterExceptionEnum.NOT_EXIST, I18nParamConstant.PARAM_ID);
         }
         BigDecimal mount;
-        if (bo.getChangeType() == 2) {
-            if (tbSysUser.getAccountBalance().compareTo(bo.getAccountBalance()) < 0) {
-                throw new BusinessException(MasterExceptionEnum.USER_BALANCE_INADEQUATE);
-            }
-            mount = tbSysUser.getAccountBalance().subtract(bo.getAccountBalance());
-        } else {
-            mount = tbSysUser.getAccountBalance().add(bo.getAccountBalance());
-        }
+        mount = tbSysUser.getAccountBalance().add(bo.getAccountBalance());
         if (new BigDecimal(9999999999.9999).compareTo(mount) < 0) {
             throw new BusinessException(MasterExceptionEnum.USER_BALANCE_LIMIT);
+        }
+        if (new BigDecimal(-9999999999.9999).compareTo(mount) > 0) {
+            throw new BusinessException(MasterExceptionEnum.USER_BALANCE_DOWN_LIMIT);
         }
         accountDetailService.addAccountDetail(bo, tbSysUser, mount);
         tbSysUser.setAccountBalance(mount);

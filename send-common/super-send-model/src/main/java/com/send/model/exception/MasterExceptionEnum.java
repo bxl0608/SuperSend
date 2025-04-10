@@ -65,6 +65,7 @@ public enum MasterExceptionEnum implements ExceptionType {
     USER_BALANCE_INADEQUATE("4019003", "用户余额不足"),
 
     USER_BALANCE_LIMIT("4019004", "金额大于上限值9999999999.9999"),
+    USER_BALANCE_DOWN_LIMIT("4019005", "金额小于下限值-9999999999.9999"),
 
     INVALID("4000000", I18nMsgKeyConstant.INVALID),
     NOT_NULL("4000001", I18nMsgKeyConstant.NOT_NULL),
